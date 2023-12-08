@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  mariadb:
+    image: 'bitnami/mariadb:latest'
+    environment:
+      - MARIADB_ROOT_PASSWORD=password123
+      - MARIADB_EXTRA_FLAGS=--max_allowed_packet=64MB --max_connections=512 --interactive_timeout=360 --wait_timeout=360 --innodb_fast_shutdown=0 --innodb_max_dirty_pages_pct=0 --innodb_buffer_pool_dump_at_shutdown=1 --innodb_buffer_pool_load_at_startup=1 --connect_timeout=30
+    ports:
+      - '3306:3306'
+    networks:
+      - db
+    volumes:
+      - ./dbdata:/var/lib/mysql
+      - ./scripts:/docker-entrypoint-startdb.d
+
+networks:
+  db:
+    driver: bridge
